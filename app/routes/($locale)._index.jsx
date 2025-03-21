@@ -98,6 +98,7 @@ function FeaturedCollection({collection}) {
  * }}
  */
 function RecommendedProducts({products}) {
+  console.log('loading page products', products);
   return (
     <div className="recommended-products">
       <h2>Recommended Products</h2>
@@ -106,7 +107,9 @@ function RecommendedProducts({products}) {
           {(response) => (
             <div className="recommended-products-grid">
               {response
-                ? response.products.nodes.map((product) => (
+                ? response.products.nodes.map((product) => {
+                  console.log("hompage product", product)
+                  return (
                     <Link
                       key={product.id}
                       className="recommended-product"
@@ -119,10 +122,11 @@ function RecommendedProducts({products}) {
                       />
                       <h4>{product.title}</h4>
                       <small>
-                        <Money data={product.priceRange.minVariantPrice} />
+                        <Money data={product.priceRange.minVariantPrice}/>
                       </small>
                     </Link>
-                  ))
+                  )
+                })
                 : null}
             </div>
           )}
@@ -160,6 +164,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
     id
     title
+    description
     handle
     priceRange {
       minVariantPrice {
@@ -167,7 +172,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
         currencyCode
       }
     }
-    images(first: 1) {
+    images(first: 2) {
       nodes {
         id
         url
@@ -179,7 +184,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 10, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         ...RecommendedProduct
       }
