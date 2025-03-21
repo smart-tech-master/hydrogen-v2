@@ -83,6 +83,8 @@ export default function Product() {
   /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
 
+  console.log('each product', product);
+
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,

@@ -16,6 +16,7 @@ export const meta = () => {
 export async function loader(args) {
   // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
+  console.log("this is arg", args)
 
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
@@ -56,6 +57,8 @@ function loadDeferredData({context}) {
 export default function Collection() {
   /** @type {LoaderReturnData} */
   const {products} = useLoaderData();
+
+  console.log('all products', products);
 
   return (
     <div className="collection">
@@ -117,12 +120,24 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    description
     featuredImage {
       id
       altText
       url
       width
       height
+    }
+    images(first: 2) {
+      edges {
+        node {
+          id
+          altText
+          url
+          width
+          height
+        }
+      }
     }
     priceRange {
       minVariantPrice {
@@ -132,6 +147,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
+    
   }
 `;
 
